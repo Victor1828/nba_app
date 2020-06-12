@@ -1,15 +1,18 @@
 import React from 'react'
-import { View, StyleSheet, StatusBar, ScrollView } from 'react-native'
+import { StyleSheet, StatusBar, ScrollView, Text } from 'react-native'
 import Logo from './logo'
+import Form from './form'
 
 const Login = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
       <ScrollView style={styles.container}>
-        <View>
-          <Logo />
-        </View>
+        <Logo />
+        <Form />
+        <Text style={styles.createAccountLabel}>
+          Don't have an account? create a new account
+        </Text>
       </ScrollView>
     </>
   )
@@ -17,9 +20,12 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#17408B',
     padding: 50,
+  },
+  createAccountLabel: {
+    color: '#fff',
+    textAlign: 'center',
   },
 })
 

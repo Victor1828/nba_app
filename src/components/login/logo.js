@@ -1,16 +1,26 @@
 import React from 'react'
-import { View, Image } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
 const Logo = () => {
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+    <View style={styles.container}>
       <Image
         source={require('../../assets/img/NBA-logo.png')}
         resizeMode="contain"
-        style={{ height: 150, width: 150 }}
+        style={styles.logo}
       />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
+  logo: {
+    height: 200,
+    width: 200,
+  },
+})
 
 export default Logo
