@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import Login from './components/login'
 import News from './components/news'
 import Games from './components/games'
+import Signup from './components/signup'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -20,10 +21,15 @@ const TabNavigator = () => (
 )
 
 const LoginStack = () => (
-  <Stack.Navigator>
+  <Stack.Navigator initialRouteName="Login">
     <Stack.Screen
       name="Login"
       component={Login}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Signup"
+      component={Signup}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>

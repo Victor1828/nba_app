@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import { View, Image, StyleSheet, Dimensions } from 'react-native'
+
+const { height, width } = Dimensions.get('screen')
 
 const Logo = () => {
   return (
@@ -18,8 +20,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    height: 200,
-    width: 200,
+    height: height / 4.5,
+    width: width / 2.06,
   },
 })
 
