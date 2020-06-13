@@ -1,17 +1,22 @@
 import React from 'react'
 import { StyleSheet, StatusBar, ScrollView, Text } from 'react-native'
-import Logo from './logo'
-import Form from './form'
+import Logo from '../utils/logo'
+import Form from '../signup/form'
 
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
     <>
       <StatusBar barStyle="light-content" />
       <ScrollView style={styles.container}>
         <Logo />
         <Form />
-        <Text style={styles.createAccountLabel}>
-          Don't have an account? create a new account
+        <Text>
+          <Text style={styles.accountLabel}>Don't have an account? </Text>
+          <Text
+            style={styles.createAccountLabel}
+            onPress={() => navigation.navigate('Signup')}>
+            create a new account
+          </Text>
         </Text>
       </ScrollView>
     </>
@@ -23,9 +28,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#17408B',
     padding: 50,
   },
+  accountLabel: {
+    color: '#fff',
+    textAlign: 'center',
+  },
   createAccountLabel: {
     color: '#fff',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
 })
 
