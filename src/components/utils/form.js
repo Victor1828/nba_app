@@ -7,7 +7,10 @@ import {
   Text,
   Dimensions,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import AsyncStorage from '@react-native-community/async-storage';import Icon from 'react-native-vector-icons/Ionicons'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { signIn, signUp } from '../../store/actions/auth'
 
 const { height } = Dimensions.get('screen')
 const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
@@ -17,6 +20,12 @@ class Form extends Component {
   state = {
     inputs: { email: '', password: '' },
     errors: {},
+  }
+
+  componentDidMount() {
+    this.getUserFromAsyncStorage(value => {
+      console.log(value)
+    })
   }
 
   validateForm = form => {
@@ -53,10 +62,40 @@ class Form extends Component {
     this.setState({ ...this.state, inputs })
   }
 
+  setUserToAsyncStorage = (payload, callback) => {
+    const dateNow = new Date()
+    const tokenExpirationDate =
+      (dateNow.getTime() +
+      Number(payload.expiresIn) * 1000
+    ).toString()
+    const userData = { ...payload, tokenExpirationDate }
+    AsyncStorage.setItem('@nba_app@user', JSON.stringify(userData))
+      .then(() => {
+        callback()
+      })
+      .catch(error => console.error(error))
+  }
+
+  getUserFromAsyncStorage = callback => {
+    AsyncStorage.getItem('@nba_app@user', (e, r) => console.log(e, r))
+      .then(() => {
+        callback()
+      })
+      .catch(error => console.error(error))
+  }
+
   handleSubmit = () => {
+    const { showPasswordConfirm, signIn, signUp, navigation } = this.props
     const errors = this.validateForm({ ...this.state.inputs })
     if (Object.keys(errors).length) return this.setState({ ...this.state, errors })
-    console.log('Valid Form')
+    if (showPasswordConfirm) return signUp(this.state.inputs)
+    signIn(this.state.inputs)
+      .then(({ payload }) => {
+        this.setUserToAsyncStorage(payload, () => {
+          //navigation.navigate('News')
+        })
+      })
+      .catch(error => console.error(error))
   }
 
   render() {
@@ -103,7 +142,11 @@ class Form extends Component {
           <Text style={styles.errorMessage}>{this.state.errors.password}</Text>
         )}
         {!showPasswordConfirm && (
-          <Text style={styles.forgotPasswordLabel}>Forgot password?</Text>
+          <Text
+            style={styles.forgotPasswordLabel}
+            onPress={() => navigation.navigate('ForgotPassword')}>
+            Forgot password?
+          </Text>
         )}
         {showPasswordConfirm && (
           <View
@@ -187,4 +230,15 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Form
+const mapStateToProps = state => {
+  console.log(state)
+  return state
+}
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ signIn, signUp }, dispatch)
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Form)

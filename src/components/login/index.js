@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, StatusBar, ScrollView, Text } from 'react-native'
 import Logo from '../utils/logo'
-import Form from '../signup/form'
+import Form from '../utils/form'
 
 const Login = ({ navigation }) => {
   return (
@@ -9,7 +9,7 @@ const Login = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <ScrollView style={styles.container}>
         <Logo />
-        <Form />
+        <Form navigation={navigation} />
         <Text>
           <Text style={styles.accountLabel}>Don't have an account? </Text>
           <Text

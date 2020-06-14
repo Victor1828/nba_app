@@ -9,6 +9,7 @@ import Login from './components/login'
 import News from './components/news'
 import Games from './components/games'
 import Signup from './components/signup'
+import ForgotPassword from './components/forgot_password'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -30,6 +31,11 @@ const LoginStack = () => (
     <Stack.Screen
       name="Signup"
       component={Signup}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>
