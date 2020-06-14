@@ -1,13 +1,13 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
-import Form from '../utils/form'
 import Logo from '../utils/logo'
+import Form from '../utils/form'
+import { ScrollView, StyleSheet } from 'react-native'
 
-const Signup = ({ navigation }) => {
+const ForgotPassword = () => {
   return (
     <ScrollView style={styles.container}>
       <Logo />
-      <Form showPasswordConfirm />
+      <Form />
     </ScrollView>
   )
 }
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Signup
+export default ForgotPassword
