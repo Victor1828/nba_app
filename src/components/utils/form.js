@@ -7,10 +7,11 @@ import {
   Text,
   Dimensions,
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage';import Icon from 'react-native-vector-icons/Ionicons'
+import AsyncStorage from '@react-native-community/async-storage'
+import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { signIn, signUp } from '../../store/actions/auth'
+import { signIn, signUp, hasToken } from '../../store/actions/auth'
 
 const { height } = Dimensions.get('screen')
 const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
@@ -23,8 +24,17 @@ class Form extends Component {
   }
 
   componentDidMount() {
+    const { navigation, hasToken } = this.props
     this.getUserFromAsyncStorage(value => {
-      console.log(value)
+      if (value === null) return
+      const user = JSON.parse(value)
+      hasToken({ refresh_token: user.refresh_token })
+        .then(({ payload }) => {
+          this.setUserToAsyncStorage(payload, () => {
+            navigation.replace('Home')
+          })
+        })
+        .catch(error => console.error(error))
     })
   }
 
@@ -77,9 +87,9 @@ class Form extends Component {
   }
 
   getUserFromAsyncStorage = callback => {
-    AsyncStorage.getItem('@nba_app@user', (e, r) => console.log(e, r))
-      .then(() => {
-        callback()
+    AsyncStorage.getItem('@nba_app@user')
+      .then(value => {
+        callback(value)
       })
       .catch(error => console.error(error))
   }
@@ -92,7 +102,7 @@ class Form extends Component {
     signIn(this.state.inputs)
       .then(({ payload }) => {
         this.setUserToAsyncStorage(payload, () => {
-          //navigation.navigate('News')
+          navigation.replace('Home')
         })
       })
       .catch(error => console.error(error))
@@ -236,7 +246,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ signIn, signUp }, dispatch)
+  bindActionCreators({ signIn, signUp, hasToken }, dispatch)
 
 export default connect(
   mapStateToProps,

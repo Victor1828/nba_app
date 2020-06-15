@@ -1,14 +1,22 @@
 import React from 'react'
-import { StyleSheet, StatusBar, ScrollView, Text } from 'react-native'
+import {
+  StyleSheet,
+  StatusBar,
+  ScrollView,
+  Text,
+  Dimensions,
+} from 'react-native'
 import Logo from '../utils/logo'
 import Form from '../utils/form'
+
+const { height, width } = Dimensions.get('screen')
 
 const Login = ({ navigation }) => {
   return (
     <>
       <StatusBar barStyle="light-content" />
       <ScrollView style={styles.container}>
-        <Logo />
+        <Logo height={height / 4.5} width={width / 2.06} />
         <Form navigation={navigation} />
         <Text>
           <Text style={styles.accountLabel}>Don't have an account? </Text>
