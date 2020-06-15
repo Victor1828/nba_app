@@ -1,15 +1,14 @@
 import React from 'react'
-import { View, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
-const { height, width } = Dimensions.get('screen')
-
-const Logo = () => {
+const Logo = props => {
+  const { height, width } = props
   return (
     <View style={styles.container}>
       <Image
         source={require('../../assets/img/NBA-logo.png')}
         resizeMode="contain"
-        style={styles.logo}
+        style={styles.logo(height, width)}
       />
     </View>
   )
@@ -19,10 +18,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
-  logo: {
-    height: height / 4.5,
-    width: width / 2.06,
-  },
+  logo: (height, width) => ({
+    height,
+    width,
+  }),
 })
 
 export default Logo

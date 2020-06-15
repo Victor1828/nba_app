@@ -1,8 +1,9 @@
-import { SIGN_IN, SIGN_UP } from '../types'
+import { SIGN_IN, SIGN_UP, HAS_TOKEN } from '../types'
 import axios from 'axios'
 import {
   FIREBASE_SIGNUP_URL,
   FIREBASE_SIGNIN_URL,
+  FIREBASE_REFRESH_TOKEN_URL,
 } from '../../constants/endpoints'
 
 export const signIn = payload => {
@@ -12,7 +13,7 @@ export const signIn = payload => {
       returnSecureToken: true,
     })
     .then(({ data }) => data)
-    .catch(error => error)
+    .catch(error => console.error(error))
 
   return {
     type: SIGN_IN,
@@ -27,10 +28,25 @@ export const signUp = payload => {
       returnSecureToken: true,
     })
     .then(({ data }) => data)
-    .catch(error => console.log(error))
+    .catch(error => console.error(error))
 
   return {
     type: SIGN_UP,
+    payload: response,
+  }
+}
+
+export const hasToken = payload => {
+  const response = axios
+    .post(FIREBASE_REFRESH_TOKEN_URL, {
+      ...payload,
+      grant_type: 'refresh_token',
+    })
+    .then(({ data }) => data)
+    .catch(error => console.error(error))
+
+  return {
+    type: HAS_TOKEN,
     payload: response,
   }
 }
