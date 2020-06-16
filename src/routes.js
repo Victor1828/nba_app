@@ -14,12 +14,31 @@ import Games from './components/games'
 import Signup from './components/signup'
 import ForgotPassword from './components/forgot_password'
 import Logo from './components/utils/logo'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
 const Home = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName
+        if (route.name === 'News') {
+          iconName = 'ios-paper'
+        } else if (route.name === 'Games') {
+          iconName = 'ios-basketball'
+        }
+        return <Icon name={iconName} size={size} color={color} />
+      },
+    })}
+    tabBarOptions={{
+      activeTintColor: '#fff',
+      inactiveTintColor: '#757575',
+      style: {
+        backgroundColor: '#17408B',
+      },
+    }}>
     <Tab.Screen name="News" component={News} />
     <Tab.Screen name="Games" component={Games} />
   </Tab.Navigator>
