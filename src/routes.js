@@ -15,9 +15,17 @@ import Signup from './components/signup'
 import ForgotPassword from './components/forgot_password'
 import Logo from './components/utils/logo'
 import Icon from 'react-native-vector-icons/Ionicons'
+import NewsDetail from './components/news_detail'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
+
+const NewsStack = () => (
+  <Stack.Navigator initialRouteName="NewsList">
+    <Stack.Screen name="NewsList" component={News} />
+    <Stack.Screen name="NewsDetail" component={NewsDetail} />
+  </Stack.Navigator>
+)
 
 const Home = () => (
   <Tab.Navigator
@@ -39,7 +47,7 @@ const Home = () => (
         backgroundColor: '#17408B',
       },
     }}>
-    <Tab.Screen name="News" component={News} />
+    <Tab.Screen name="News" component={NewsStack} />
     <Tab.Screen name="Games" component={Games} />
   </Tab.Navigator>
 )
